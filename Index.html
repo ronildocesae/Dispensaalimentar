@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GESTÃO ALIMENTAR</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{font-family:'Montserrat',sans-serif;box-sizing:border-box;margin:0;padding:0}
+body{background:#f6fbfb;color:#1a1a1a;min-height:100vh}
+
+/* FUNDO */
+.app{
+  background:
+    radial-gradient(ellipse 800px 500px at 10% -10%, rgba(13,148,136,.1), transparent 60%),
+    radial-gradient(ellipse 700px 400px at 110% 110%, rgba(8,145,178,.08), transparent 55%),
+    linear-gradient(180deg, #f6fbfb 0%, #eef7f7 40%, #e8f4f4 100%);
+  padding:20px 16px;
+  min-height:100vh;
+  position:relative;
+}
+.app::before{
+  content:'';position:absolute;inset:0;opacity:.02;
+  background-image:linear-gradient(rgba(26,26,26,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(26,26,26,.5) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;
+}
+.container{max-width:850px;margin:0 auto;position:relative;z-index:1}
+
+/* RELÓGIO */
+.clock-box{
+  background:linear-gradient(135deg,#fff 0%,#eef7f7 100%);
+  border:1px solid rgba(13,148,136,.2);
+  border-radius:24px;
+  padding:36px 20px;
+  text-align:center;
+  margin-bottom:24px;
+  box-shadow:0 4px 40px rgba(13,148,136,.08),inset 0 1px 0 rgba(255,255,255,.8);
+  position:relative;
+  overflow:hidden;
+}
+.clock-box::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:3px;
+  background:linear-gradient(90deg,transparent,#0d9488,transparent);
+}
+.clock-label{font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:#0d9488;margin-bottom:14px}
+.time-row{display:flex;align-items:baseline;justify-content:center;gap:2px;flex-wrap:nowrap}
+.time-num{font-size:48px;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:-1px;background:linear-gradient(135deg,#1a1a1a,#4a4a4a);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.time-colon{font-size:44px;font-weight:200;color:#0d9488;margin:0 2px;animation:pulse 1s infinite}
+.time-sec{font-size:22px;font-weight:600;color:#0d9488;font-variant-numeric:tabular-nums;line-height:1;margin-left:6px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.divider{height:1px;width:160px;margin:14px auto;background:linear-gradient(90deg,transparent,rgba(13,148,136,.3),transparent)}
+.date-big{font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#1a1a1a}
+.date-small{font-size:11px;color:#6b7280;margin-top:6px;font-weight:400}
+
+/* TOTAL */
+.total-box{
+  background:linear-gradient(135deg,#0d9488 0%,#0a7a70 50%,#075f57 100%);
+  color:#fff;border-radius:16px;padding:20px;margin-top:16px;
+  box-shadow:0 8px 30px rgba(13,148,136,.25);text-align:left;
+}
+.total-label{font-size:11px;font-weight:500;opacity:.85;letter-spacing:.15em;text-transform:uppercase}
+.total-value{font-size:28px;font-weight:700;line-height:1.1;margin-top:6px;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.total-meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2);font-size:12px;opacity:.9}
+.btn-clear{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Montserrat',sans-serif}
+.btn-clear:hover{background:rgba(255,255,255,.15)}
+
+/* TÍTULO */
+.title-section{text-align:center;margin-bottom:24px}
+.title-bar{width:40px;height:3px;margin:0 auto 16px;background:linear-gradient(90deg,#0d9488,#0891b2);border-radius:2px}
+.title-main{font-size:28px;font-weight:800;color:#1a1a1a;letter-spacing:-.5px;line-height:1.2;text-transform:uppercase}
+.title-sub{font-size:12px;font-weight:500;color:#6b7280;margin-top:8px;letter-spacing:.03em}
+
+/* CARDS */
+.card{
+  background:#fff;border:1px solid rgba(26,26,26,.08);border-radius:20px;
+  box-shadow:0 4px 30px rgba(0,0,0,.04);margin-bottom:24px;overflow:hidden;
+}
+.card-header{padding:20px;border-bottom:1px solid rgba(26,26,26,.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:linear-gradient(180deg,#f6fbfb 0%,#fff 100%)}
+.card-title{font-size:15px;font-weight:700;color:#1a1a1a;display:flex;align-items:center;gap:10px}
+.card-title::before{content:'';width:3px;height:16px;background:#0d9488;border-radius:2px}
+.card-title.green::before{background:#0891b2}
+.tag{background:rgba(13,148,136,.1);color:#0d9488;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
+
+/* FORMULÁRIO */
+.form-body{padding:24px 20px}
+.form-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.form-label{display:block;font-size:11px;font-weight:600;color:#6b7280;margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase}
+.form-input{width:100%;border:1px solid rgba(26,26,26,.08);background:#fff;border-radius:12px;padding:14px 16px;font-size:14px;font-family:'Montserrat',sans-serif;font-weight:500;color:#1a1a1a;transition:all .3s}
+.form-input:focus{outline:none;border-color:#0d9488;box-shadow:0 0 0 4px rgba(13,148,136,.12);background:#f4fbfb}
+.btn-add{background:linear-gradient(135deg,#0d9488 0%,#0a7a70 100%);color:#fff;font-weight:700;border:none;border-radius:12px;padding:14px 28px;cursor:pointer;transition:all .3s;box-shadow:0 4px 15px rgba(13,148,136,.25);font-family:'Montserrat',sans-serif;font-size:14px;width:100%}
+.btn-add:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(13,148,136,.35)}
+
+/* ITENS DA LISTA */
+.item{border-bottom:1px solid rgba(26,26,26,.08);padding:16px 20px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;transition:background .3s}
+.item:last-child{border-bottom:none}
+.item:hover{background:rgba(13,148,136,.03)}
+.item-info{display:flex;flex-direction:column;gap:6px;min-width:0}
+.item-name{font-weight:600;color:#1a1a1a;font-size:15px;word-wrap:break-word}
+.item-details{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:#6b7280;align-items:center}
+.item-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.item-val{font-weight:500;color:#1a1a1a;font-variant-numeric:tabular-nums}
+.item-sub{font-weight:700;color:#0891b2;font-size:16px;font-variant-numeric:tabular-nums}
+.btn-del{background:transparent;border:1px solid rgba(220,38,38,.25);color:#dc2626;width:40px;height:40px;border-radius:10px;cursor:pointer;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.btn-del:hover{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.5)}
+
+/* VAZIO */
+.empty{padding:60px 20px;text-align:center}
+.empty-icon{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;background:rgba(13,148,136,.08);display:flex;align-items:center;justify-content:center;font-size:28px;color:#0d9488;opacity:.5}
+.empty-txt{color:#6b7280;font-size:14px;font-weight:600}
+.empty-sub{color:#6b7280;font-size:12px;margin-top:6px;opacity:.7}
+
+.footer{text-align:center;margin-top:24px}
+.footer-line{height:1px;width:80px;margin:0 auto 10px;background:linear-gradient(90deg,transparent,rgba(13,148,136,.3),transparent)}
+.footer-txt{color:#6b7280;font-size:10px;letter-spacing:.08em;font-weight:500}
+
+/* RESPONSIVO */
+@media(min-width:640px){
+  .form-grid{grid-template-columns:2fr 1fr 1fr auto;align-items:end}
+  .btn-add{width:auto}
+  .time-num{font-size:64px}
+  .time-colon{font-size:56px}
+  .time-sec{font-size:28px}
+  .total-value{font-size:40px}
+}
+@media(min-width:768px){
+  .time-num{font-size:72px}
+  .time-colon{font-size:64px}
+  .time-sec{font-size:32px}
+  .total-value{font-size:44px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="container">
+    
+    <!-- RELÓGIO + TOTAL -->
+    <div class="clock-box">
+      <div class="clock-label">Horário Oficial</div>
+      <div class="time-row">
+        <span id="hours" class="time-num">00</span>
+        <span class="time-colon">:</span>
+        <span id="minutes" class="time-num">00</span>
+        <span class="time-colon">:</span>
+        <span id="seconds" class="time-sec">00</span>
+      </div>
+      <div class="divider"></div>
+      <div id="dateFull" class="date-big"></div>
+      <div id="weekday" class="date-small"></div>
+      
+      <div class="total-box">
+        <div class="total-label">Valor Total dos Alimentos</div>
+        <div id="totalGeral" class="total-value">R$ 0,00</div>
+        <div class="total-meta">
+          <span id="countInfo">0 itens cadastrados</span>
+          <button onclick="limparTudo()" class="btn-clear">Limpar tudo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TÍTULO -->
+    <div class="title-section">
+      <div class="title-bar"></div>
+      <h1 class="title-main">GESTÃO ALIMENTAR</h1>
+      <p class="title-sub">Controle Profissional de Alimentos</p>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Adicionar Novo Alimento</h2>
+      </div>
+      <div class="form-body">
+        <div class="form-grid">
+          <div>
+            <label class="form-label">Nome do Alimento</label>
+            <input id="nome" type="text" placeholder="Ex: Arroz Integral" class="form-input">
+          </div>
+          <div>
+            <label class="form-label">Quantidade</label>
+            <input id="qtd" type="number" min="0" step="0.01" placeholder="0" class="form-input">
+          </div>
+          <div>
+            <label class="form-label">Preço Unitário (R$)</label>
+            <input id="preco" type="number" min="0" step="0.01" placeholder="0,00" class="form-input">
+          </div>
+          <button onclick="adicionar()" class="btn-add">✓ Adicionar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title green">Lista de Alimentos</h2>
+        <span id="countTag" class="tag">0 itens</span>
+      </div>
+      <div id="lista"></div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-line"></div>
+      <p class="footer-txt">DADOS SALVOS AUTOMATICAMENTE NO NAVEGADOR</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==========================================
+// DADOS
+// ==========================================
+var STORAGE = 'gestao_alimentar_v_final';
+var alimentos = [];
+
+try {
+  var dados = localStorage.getItem(STORAGE);
+  if (dados) alimentos = JSON.parse(dados);
+} catch(e) { alimentos = []; }
+
+function salvar() {
+  try { localStorage.setItem(STORAGE, JSON.stringify(alimentos)); } catch(e) {}
+}
+
+// ==========================================
+// AUXILIARES
+// ==========================================
+function moeda(v) {
+  return 'R$ ' + Number(v).toFixed(2).replace('.', ',');
+}
+
+function atualizarTotais() {
+  var total = 0;
+  for (var i = 0; i < alimentos.length; i++) {
+    total += Number(alimentos[i].qtd) * Number(alimentos[i].preco);
+  }
+  var qtd = alimentos.length;
+  
+  document.getElementById('totalGeral').textContent = moeda(total);
+  document.getElementById('countInfo').textContent = qtd + ' ' + (qtd === 1 ? 'item cadastrado' : 'itens cadastrados');
+  document.getElementById('countTag').textContent = qtd + ' ' + (qtd === 1 ? 'item' : 'itens');
+}
+
+// ==========================================
+// RENDERIZAR LISTA
+// ==========================================
+function renderizar() {
+  var lista = document.getElementById('lista');
+  
+  if (alimentos.length === 0) {
+    lista.innerHTML = '<div class="empty"><div class="empty-icon">●</div><div class="empty-txt">Nenhum alimento cadastrado</div><div class="empty-sub">Adicione seu primeiro item acima</div></div>';
+    atualizarTotais();
+    return;
+  }
+  
+  var html = '';
+  for (var i = 0; i < alimentos.length; i++) {
+    var item = alimentos[i];
+    var sub = Number(item.qtd) * Number(item.preco);
+    html += '<div class="item">';
+    html += '<div class="item-info">';
+    html += '<div class="item-name">' + item.nome + '</div>';
+    html += '<div class="item-details">';
+    html += '<div><span class="item-lbl">Qtd </span><span class="item-val">' + Number(item.qtd) + '</span></div>';
+    html += '<div><span class="item-lbl">Unit </span><span class="item-val">' + moeda(item.preco) + '</span></div>';
+    html += '<div><span class="item-lbl">Subtotal </span><span class="item-sub">' + moeda(sub) + '</span></div>';
+    html += '</div></div>';
+    html += '<button class="btn-del" onclick="excluir(' + i + ')" title="Excluir">×</button>';
+    html += '</div>';
+  }
+  
+  lista.innerHTML = html;
+  atualizarTotais();
+}
+
+// ==========================================
+// AÇÕES DOS BOTÕES
+// ==========================================
+function adicionar() {
+  var nome = document.getElementById('nome').value.trim();
+  var qtd = document.getElementById('qtd').value;
+  var preco = document.getElementById('preco').value;
+  
+  if (!nome) { alert('Informe o nome do alimento!'); document.getElementById('nome').focus(); return; }
+  if (!qtd || Number(qtd) <= 0) { alert('Informe uma quantidade válida!'); document.getElementById('qtd').focus(); return; }
+  if (!preco || Number(preco) < 0) { alert('Informe um preço válido!'); document.getElementById('preco').focus(); return; }
+  
+  alimentos.push({ nome: nome, qtd: Number(qtd), preco: Number(preco) });
+  salvar();
+  renderizar();
+  
+  document.getElementById('nome').value = '';
+  document.getElementById('qtd').value = '';
+  document.getElementById('preco').value = '';
+  document.getElementById('nome').focus();
+}
+
+function excluir(indice) {
+  if (confirm('Deseja realmente excluir este alimento?')) {
+    alimentos.splice(indice, 1);
+    salvar();
+    renderizar();
+  }
+}
+
+function limparTudo() {
+  if (alimentos.length === 0) { alert('A lista já está vazia!'); return; }
+  if (confirm('Deseja APAGAR TODOS os alimentos?\nEsta ação não pode ser desfeita.')) {
+    alimentos = [];
+    salvar();
+    renderizar();
+  }
+}
+
+// ==========================================
+// RELÓGIO
+// ==========================================
+function relogio() {
+  var agora = new Date();
+  var h = String(agora.getHours()).padStart(2, '0');
+  var m = String(agora.getMinutes()).padStart(2, '0');
+  var s = String(agora.getSeconds()).padStart(2, '0');
+  
+  document.getElementById('hours').textContent = h;
+  document.getElementById('minutes').textContent = m;
+  document.getElementById('seconds').textContent = s;
+  
+  var dias = ['DOMINGO','SEGUNDA-FEIRA','TERÇA-FEIRA','QUARTA-FEIRA','QUINTA-FEIRA','SEXTA-FEIRA','SÁBADO'];
+  var diasExt = ['Domingo','Segunda-feira','Terça-feira','Quinta-feira','Quinta-feira','Sexta-feira','Sábado'];
+  var meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  
+  document.getElementById('dateFull').textContent = dias[agora.getDay()] + ' • ' + agora.getDate() + ' DE ' + meses[agora.getMonth()].toUpperCase();
+  document.getElementById('weekday').textContent = diasExt[agora.getDay()] + ', ' + agora.getDate() + ' de ' + meses[agora.getMonth()] + ' de ' + agora.getFullYear();
+}
+
+// ==========================================
+// INICIAR TUDO
+// ==========================================
+relogio();
+setInterval(relogio, 1000);
+renderizar();
+
+// Enter no último campo
+document.getElementById('preco').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') adicionar();
+});
+</script>
+</body>
+</html>
+
