@@ -295,7 +295,7 @@ function adicionar() {
 }
 
 function excluir(indice) {
-  if (confirm('Deseja realmente excluir este alimento?')) {
+  if (window.prompt('Digite EXCLUIR para confirmar:', '') === 'EXCLUIR') {
     alimentos.splice(indice, 1);
     salvar();
     renderizar();
@@ -304,12 +304,13 @@ function excluir(indice) {
 
 function limparTudo() {
   if (alimentos.length === 0) { alert('A lista já está vazia!'); return; }
-  if (confirm('Deseja APAGAR TODOS os alimentos?\nEsta ação não pode ser desfeita.')) {
+  if (window.prompt('Digite APAGAR TUDO para confirmar:', '') === 'APAGAR TUDO') {
     alimentos = [];
     salvar();
     renderizar();
   }
 }
+
 
 // ==========================================
 // RELÓGIO
