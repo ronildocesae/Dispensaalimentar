@@ -295,7 +295,9 @@ function adicionar() {
 }
 
 function excluir(indice) {
-  if (window.prompt('Digite EXCLUIR para confirmar:', '') === 'EXCLUIR') {
+  var resposta = prompt('Digite EXCLUIR para confirmar:');
+  if (resposta === null) return;
+  if (resposta.trim() === 'EXCLUIR') {
     alimentos.splice(indice, 1);
     salvar();
     renderizar();
@@ -304,12 +306,15 @@ function excluir(indice) {
 
 function limparTudo() {
   if (alimentos.length === 0) { alert('A lista já está vazia!'); return; }
-  if (window.prompt('Digite APAGAR TUDO para confirmar:', '') === 'APAGAR TUDO') {
+  var resposta = prompt('Digite APAGAR TUDO para confirmar:');
+  if (resposta === null) return;
+  if (resposta.trim() === 'APAGAR TUDO') {
     alimentos = [];
     salvar();
     renderizar();
   }
 }
+
 
 
 // ==========================================
